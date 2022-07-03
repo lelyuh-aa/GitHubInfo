@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.lelyuh.githubinfo"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".GitHubInfoApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_github_logo_splash"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_github_logo_splash"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GitHubInfo">
+
+        <activity
+            android:name=".presentation.activity.SplashActivity"
+            android:theme="@style/Theme.CarSplash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.activity.GitHubLoginActivity">
+        </activity>
+
+        <activity
+            android:name=".presentation.activity.RepositoriesListActivity">
+        </activity>
+
+        <activity
+            android:name=".presentation.activity.CommitsSummaryActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+    </application>
+
+</manifest>

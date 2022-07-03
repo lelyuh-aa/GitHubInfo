@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/commit_view_height"
+    tools:viewBindingIgnore="true">
+
+    <TextView
+        android:id="@+id/commits_count_text_view"
+        android:layout_width="@dimen/constraint_match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Commits count: 5" />
+
+    <TextView
+        android:id="@+id/period_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="May 2022" />
+
+    <View
+        android:id="@+id/bar_view"
+        android:layout_width="@dimen/commit_bar_width"
+        android:layout_height="@dimen/margin_2"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:background="@drawable/commits_bar_background"
+        app:layout_constraintBottom_toTopOf="@id/period_text_view"
+        app:layout_constraintStart_toStartOf="@id/period_text_view"
+        app:layout_constraintEnd_toEndOf="@id/period_text_view" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?attr/progressBarStyle"
+        android:layout_width="@dimen/progress_size"
+        android:layout_height="@dimen/progress_size"
+        android:indeterminateTint="@color/purple_500"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/commits_info_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="commits_count_text_view,bar_view,period_text_view"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

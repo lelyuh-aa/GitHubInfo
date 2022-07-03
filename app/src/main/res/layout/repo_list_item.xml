@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_4"
+    android:layout_marginBottom="@dimen/margin_4"
+    android:layout_marginStart="@dimen/margin_8"
+    android:layout_marginEnd="@dimen/margin_8"
+    android:background="@drawable/repository_item_list_background"
+    tools:viewBindingIgnore="true">
+
+    <ImageView
+        android:id="@+id/github_icon_view"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_margin="@dimen/margin_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/name_text_view"
+        app:srcCompat="@drawable/ic_github_logo"
+        android:importantForAccessibility="no"/>
+
+    <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="@dimen/constraint_match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_8"
+        app:layout_goneMarginBottom="@dimen/margin_16"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/description_text_view"
+        app:layout_constraintStart_toEndOf="@+id/github_icon_view"
+        app:layout_constraintEnd_toStartOf="@id/chevron_icon_view"
+        tools:text="Repository" />
+
+    <TextView
+        android:id="@+id/description_text_view"
+        android:layout_width="@dimen/constraint_match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_4"
+        android:layout_marginBottom="@dimen/margin_16"
+        android:textSize="@dimen/text_size_small"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/name_text_view"
+        app:layout_constraintStart_toStartOf="@+id/name_text_view"
+        app:layout_constraintEnd_toEndOf="@id/name_text_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Test repository for new project" />
+
+    <ImageView
+        android:id="@+id/chevron_icon_view"
+        android:layout_width="@dimen/icon_size_small"
+        android:layout_height="@dimen/icon_size_small"
+        android:layout_marginEnd="@dimen/margin_8"
+        app:tint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/github_icon_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/github_icon_view"
+        app:srcCompat="@drawable/ic_chevron_right"
+        android:importantForAccessibility="no"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
