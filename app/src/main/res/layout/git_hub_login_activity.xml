@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/login_description_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_80"
+        android:layout_marginStart="@dimen/margin_80"
+        android:layout_marginEnd="@dimen/margin_80"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/text_size_small"
+        android:text="@string/git_hub_login_description"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/login_edit_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_80"
+        android:layout_marginEnd="@dimen/margin_80"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/text_size_large"
+        android:hint="@string/edit_text_hint"
+        android:focusable="true"
+        android:inputType="text"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/favorites_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginStart="@dimen/margin_80"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/purple_500"
+        android:text="@string/favorites_text"
+        android:drawablePadding="@dimen/margin_8"
+        android:visibility="gone"
+        app:drawableEndCompat="@drawable/ic_chevron_right"
+        app:drawableTint="@color/purple_500"
+        tools:visibility="visible"/>
+
+    <Button
+        android:id="@+id/start_load_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_80"
+        android:layout_marginEnd="@dimen/margin_80"
+        android:layout_gravity="center"
+        android:text="@string/start_load_repositories"
+        android:textSize="@dimen/text_size"
+        android:enabled="false"/>
+
+</LinearLayout>
