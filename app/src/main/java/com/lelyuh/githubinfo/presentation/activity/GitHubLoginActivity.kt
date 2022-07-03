@@ -38,62 +38,11 @@ class GitHubLoginActivity : AppCompatActivity() {
         initViews()
         initFragmentListener()
         observeViewModel()
-        main()
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.updateFavoritesLogins()
-    }
-
-    private fun find(str: String): String {
-        val k = str.first().digitToInt()
-        val searchString = str.substring(1)
-        var result = ""
-        val iterator = searchString.iterator()
-        var currDiffSymbCount = 0
-        val strBuilder = StringBuilder()
-        while (iterator.hasNext()) {
-            val currSymbol = iterator.next()
-            if (currDiffSymbCount < k) {
-                if (!strBuilder.contains(currSymbol)) {
-                    currDiffSymbCount++
-                }
-                strBuilder.append(currSymbol)
-                if (currDiffSymbCount == k) {
-                    if (strBuilder.length > result.length) {
-                        result = strBuilder.toString()
-                    }
-                    currDiffSymbCount = 0
-                    strBuilder.clear()
-                }
-            }
-        }
-        return result
-    }
-
-    enum class Sport { HIKE, RUN, TOURING_BICYCLE, E_TOURING_BICYCLE }
-
-    data class Summary(val sport: Sport, val distance: Int)
-
-    fun main() {
-        val sportStats = listOf(
-            Summary(Sport.HIKE, 92),
-            Summary(Sport.RUN, 77),
-            Summary(Sport.TOURING_BICYCLE, 322),
-            Summary(Sport.E_TOURING_BICYCLE, 656)
-        )
-
-        // Write kotlin code to print the top sport by distance excluding eBikes.
-        println(
-            sportStats
-                .filter { it.sport != Sport.E_TOURING_BICYCLE }
-                .sortedByDescending { it.distance }
-        )
-
-        val summary = Summary(Sport.HIKE, 8)
-        val (nextSport, nextDistance) = summary
-        println("$nextDistance")
     }
 
     private fun initViews() {
