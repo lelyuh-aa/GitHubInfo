@@ -10,7 +10,7 @@ import com.lelyuh.githubinfo.models.domain.RepositoryListModel
 /**
  * View Holder for item view in [RecyclerView] for representing repository info
  */
-internal class RepositoryItemViewHolder(
+internal class RepositoryItemViewHolder (
     private val listener: RepositoryListAdapter.OnItemClickListener,
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {

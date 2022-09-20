@@ -7,130 +7,111 @@ import com.lelyuh.githubinfo.GitHubInfoTestHelper.createRepoModel
 import com.lelyuh.githubinfo.GitHubInfoTestHelper.createRepoResponse
 import com.lelyuh.githubinfo.data.api.GitHubInfoApi
 import com.lelyuh.githubinfo.models.domain.CommitsDomainModel
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
-import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import java.net.ConnectException
 
+@ExperimentalCoroutinesApi
 class GitHubInfoRepositoryTest {
     private val gitHubApi = mockk<GitHubInfoApi>()
 
     private val gitHubRepository = GitHubInfoRepositoryImpl(gitHubApi)
 
     @Test
-    fun `test success repo list first call`() {
+    fun `test success repo list first call`() = runTest {
         val apiResponse = createRepoResponse()
         val expectedModel = createRepoModel()
-        every { gitHubApi.repositories(URL) } returns Single.just(apiResponse)
+        coEvery { gitHubApi.repositories(URL) } returns apiResponse
 
-        gitHubRepository.repos(URL)
-            .test()
-            .assertValue(expectedModel)
-
-        verify { gitHubApi.repositories(URL) }
+        assertThat(gitHubRepository.repos(URL), `is`(expectedModel))
+        coVerify { gitHubApi.repositories(URL) }
     }
 
     @Test
-    fun `test success repo list two calls second from cache`() {
+    fun `test success repo list two calls second from cache`() = runTest {
         val apiResponse = createRepoResponse()
         val expectedModel = createRepoModel()
-        every { gitHubApi.repositories(URL) } returns Single.just(apiResponse)
+        coEvery { gitHubApi.repositories(URL) } returns apiResponse
 
-        gitHubRepository.repos(URL)
-            .test()
-            .assertValue(expectedModel)
-        gitHubRepository.repos(URL)
-            .test()
-            .assertValue(expectedModel)
+        val actualResult1 = gitHubRepository.repos(URL)
+        val actualResult2 = gitHubRepository.repos(URL)
 
-        verify(exactly = 1) { gitHubApi.repositories(URL) }
+        assertThat(actualResult1, `is`(expectedModel))
+        assertThat(actualResult2, `is`(expectedModel))
+        coVerify(exactly = 1) { gitHubApi.repositories(URL) }
     }
 
     @Test
-    fun `test success repo list only mandatory fields`() {
+    fun `test success repo list only mandatory fields`() = runTest {
         val apiResponse = createRepoResponse(false)
         val expectedModel = createRepoModel(false)
-        every { gitHubApi.repositories(URL) } returns Single.just(apiResponse)
+        coEvery { gitHubApi.repositories(URL) } returns apiResponse
 
-        gitHubRepository.repos(URL)
-            .test()
-            .assertValue(expectedModel)
-
-        verify { gitHubApi.repositories(URL) }
+        assertThat(gitHubRepository.repos(URL), `is`(expectedModel))
+        coVerify { gitHubApi.repositories(URL) }
     }
 
     @Test
-    fun `test success repo list empty data`() {
-        every { gitHubApi.repositories(URL) } returns Single.just(emptyList())
+    fun `test success repo list empty data`() = runTest {
+        coEvery { gitHubApi.repositories(URL) } returns emptyList()
+
+        assertThat(gitHubRepository.repos(URL), `is`(emptyList()))
+        coVerify { gitHubApi.repositories(URL) }
+    }
+
+    @Test(expected = ConnectException::class)
+    fun `test error repo list by server error`() = runTest {
+        coEvery { gitHubApi.repositories(URL) } throws ConnectException()
 
         gitHubRepository.repos(URL)
-            .test()
-            .assertValue(emptyList())
 
-        verify { gitHubApi.repositories(URL) }
+        coVerify { gitHubApi.repositories(URL) }
     }
 
     @Test
-    fun `test error repo list by server error`() {
-        every { gitHubApi.repositories(URL) } returns Single.error(ConnectException())
-
-        gitHubRepository.repos(URL)
-            .test()
-            .assertError(ConnectException::class.java)
-
-        verify { gitHubApi.repositories(URL) }
-    }
-
-    @Test
-    fun `test success commits list first call`() {
+    fun `test success commits list first call`() = runTest {
         val apiResponse = createCommitResponse()
         val expectedModel = createCommitDomainModel()
-        every { gitHubApi.commitsInfo(URL) } returns Single.just(apiResponse)
+        coEvery { gitHubApi.commitsInfo(URL) } returns apiResponse
 
-        gitHubRepository.commitsInfo(URL)
-            .test()
-            .assertValue(expectedModel)
-
-        verify { gitHubApi.commitsInfo(URL) }
+        assertThat(gitHubRepository.commitsInfo(URL), `is`(expectedModel))
+        coVerify { gitHubApi.commitsInfo(URL) }
     }
 
     @Test
-    fun `test success commits list two calls second from cache`() {
+    fun `test success commits list two calls second from cache`() = runTest {
         val apiResponse = createCommitResponse()
         val expectedModel = createCommitDomainModel()
-        every { gitHubApi.commitsInfo(URL) } returns Single.just(apiResponse)
+        coEvery { gitHubApi.commitsInfo(URL) } returns apiResponse
 
-        gitHubRepository.commitsInfo(URL)
-            .test()
-            .assertValue(expectedModel)
-        gitHubRepository.commitsInfo(URL)
-            .test()
-            .assertValue(expectedModel)
+        val actualResult1 = gitHubRepository.commitsInfo(URL)
+        val actualResult2 = gitHubRepository.commitsInfo(URL)
 
-        verify(exactly = 1) { gitHubApi.commitsInfo(URL) }
+        assertThat(actualResult1, `is`(expectedModel))
+        assertThat(actualResult2, `is`(expectedModel))
+        coVerify(exactly = 1) { gitHubApi.commitsInfo(URL) }
     }
 
     @Test
-    fun `test success commits list empty data`() {
-        every { gitHubApi.commitsInfo(URL) } returns Single.just(emptyList())
+    fun `test success commits list empty data`() = runTest {
+        coEvery { gitHubApi.commitsInfo(URL) } returns emptyList()
 
-        gitHubRepository.commitsInfo(URL)
-            .test()
-            .assertValue(CommitsDomainModel(emptyList(), emptySet()))
-
-        verify { gitHubApi.commitsInfo(URL) }
+        assertThat(gitHubRepository.commitsInfo(URL), `is`(CommitsDomainModel(emptyList(), emptySet())))
+        coVerify { gitHubApi.commitsInfo(URL) }
     }
 
-    @Test
-    fun `test error commits list by server error`() {
-        every { gitHubApi.commitsInfo(URL) } returns Single.error(ConnectException())
+    @Test(expected = ConnectException::class)
+    fun `test error commits list by server error`() = runTest {
+        coEvery { gitHubApi.commitsInfo(URL) } throws ConnectException()
 
         gitHubRepository.commitsInfo(URL)
-            .test()
-            .assertError(ConnectException::class.java)
 
-        verify { gitHubApi.commitsInfo(URL) }
+        coVerify { gitHubApi.commitsInfo(URL) }
     }
 }

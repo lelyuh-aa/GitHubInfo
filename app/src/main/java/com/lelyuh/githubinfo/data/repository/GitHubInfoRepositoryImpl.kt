@@ -5,7 +5,6 @@ import com.lelyuh.githubinfo.domain.repository.GitHubInfoRepository
 import com.lelyuh.githubinfo.models.data.CommitResponse
 import com.lelyuh.githubinfo.models.domain.CommitsDomainModel
 import com.lelyuh.githubinfo.models.domain.RepositoryListModel
-import io.reactivex.rxjava3.core.Single
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,32 +25,24 @@ internal class GitHubInfoRepositoryImpl(
     private val cacheRepositories = hashMapOf<String, List<RepositoryListModel>>()
     private val cacheCommitsInfo = hashMapOf<String, CommitsDomainModel>()
 
-    override fun repos(reposUrl: String): Single<List<RepositoryListModel>> =
-        cacheRepositories[reposUrl]?.let { repoList ->
-            Single.just(repoList)
-        } ?: api.repositories(reposUrl)
-            .map { response ->
-                val repoModelList = response.map { responseListItem ->
-                    RepositoryListModel(
-                        responseListItem.name,
-                        responseListItem.description,
-                        responseListItem.language,
-                        responseListItem.commitsUrl.substringBefore(LEFT_BRACE_SYMBOL)
-                    )
-                }
+    override suspend fun repos(reposUrl: String): List<RepositoryListModel> =
+        cacheRepositories[reposUrl] ?: api.repositories(reposUrl)
+            .map { responseListItem ->
+                RepositoryListModel(
+                    responseListItem.name,
+                    responseListItem.description,
+                    responseListItem.language,
+                    responseListItem.commitsUrl.substringBefore(LEFT_BRACE_SYMBOL)
+                )
+            }.let { repoModelList ->
                 cacheRepositories[reposUrl] = repoModelList
                 repoModelList
             }
 
-    override fun commitsInfo(commitsUrl: String): Single<CommitsDomainModel> =
-        cacheCommitsInfo[commitsUrl]?.let { commitModel ->
-            Single.just(commitModel)
-        } ?: api.commitsInfo(commitsUrl)
-            .map { response ->
-                mapResponseCommitList(commitsUrl, response)
-            }
+    override suspend fun commitsInfo(commitsUrl: String): CommitsDomainModel =
+        cacheCommitsInfo[commitsUrl] ?: convertCommitsResponse(commitsUrl, api.commitsInfo(commitsUrl))
 
-    private fun mapResponseCommitList(commitsUrl: String, responseList: List<CommitResponse>): CommitsDomainModel {
+    private fun convertCommitsResponse(commitsUrl: String, responseList: List<CommitResponse>): CommitsDomainModel {
         val dateList = arrayListOf<Date>()
         val authorsSet = sortedSetOf<String>()
         responseList.forEach { commitBean ->

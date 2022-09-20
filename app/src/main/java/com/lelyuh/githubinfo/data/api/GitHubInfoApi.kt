@@ -2,7 +2,6 @@ package com.lelyuh.githubinfo.data.api
 
 import com.lelyuh.githubinfo.models.data.CommitResponse
 import com.lelyuh.githubinfo.models.data.RepositoryResponse
-import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Url
 
@@ -17,15 +16,15 @@ interface GitHubInfoApi {
      * Get list of public repositories of given user by [reposUrl]
      */
     @GET
-    fun repositories(
+    suspend fun repositories(
         @Url reposUrl: String
-    ): Single<List<RepositoryResponse>>
+    ): List<RepositoryResponse>
 
     /**
      * Get information about commits on given repo by custom [commitsUrl]
      */
     @GET
-    fun commitsInfo(
+    suspend fun commitsInfo(
         @Url commitsUrl: String
-    ): Single<List<CommitResponse>>
+    ): List<CommitResponse>
 }

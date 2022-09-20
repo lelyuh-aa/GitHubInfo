@@ -59,7 +59,7 @@ are completely covered by unit tests.
 ## 3d-party libraries
 The application uses several 3d-party libraries for it work:
 - [Retrofit](https://github.com/square/retrofit) - to make requests to the network
-- [RxJava](https://github.com/ReactiveX/RxJava) - to perform asynchronous tasks
+- [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-guide.html) - to perform asynchronous tasks
 - [Dagger](https://github.com/google/dagger) - framework to implement dependency injection
 - [Mockk](https://mockk.io/) - for support testing on Kotlin
 

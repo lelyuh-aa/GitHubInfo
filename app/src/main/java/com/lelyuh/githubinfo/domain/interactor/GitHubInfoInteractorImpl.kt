@@ -1,11 +1,12 @@
 package com.lelyuh.githubinfo.domain.interactor
 
+import com.lelyuh.githubinfo.domain.coroutines.CoroutineDispatchers
 import com.lelyuh.githubinfo.domain.repository.GitHubInfoRepository
 import com.lelyuh.githubinfo.models.domain.CommitGroupKeyModel
 import com.lelyuh.githubinfo.models.domain.CommitsDomainModel
 import com.lelyuh.githubinfo.models.presentation.CommitsMonthsModel
 import com.lelyuh.githubinfo.models.presentation.CommitsPresentationModel
-import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -14,19 +15,23 @@ import java.util.Locale
  * Interactor implementation for git hub information
  *
  * @constructor
+ * @param   dispatchers coroutine dispatchers for choosing context
  * @param   repository  repository for retrieving information about public GitHub repositories
  *
  * @author Leliukh Aleksandr
  */
 internal class GitHubInfoInteractorImpl(
+    private val dispatchers: CoroutineDispatchers,
     private val repository: GitHubInfoRepository
 ) : GitHubInfoInteractor {
 
-    override fun repos(reposUrl: String) = repository.repos(reposUrl)
+    override suspend fun repos(reposUrl: String) = withContext(dispatchers.ioDispatcher()) {
+        repository.repos(reposUrl)
+    }
 
-    override fun commitsInfo(commitsUrl: String): Single<CommitsPresentationModel> =
-        repository.commitsInfo(commitsUrl)
-            .map(this::mapCommitDomainModel)
+    override suspend fun commitsInfo(commitsUrl: String) = withContext(dispatchers.ioDispatcher()) {
+        mapCommitDomainModel(repository.commitsInfo(commitsUrl))
+    }
 
     private fun mapCommitDomainModel(domainModel: CommitsDomainModel): CommitsPresentationModel {
         val groupingMap = groupDateByMonths(domainModel.commitsDateList)
