@@ -79,14 +79,14 @@ class RepositoriesListActivity : AppCompatActivity(), RepositoryListAdapter.OnIt
                 isVisible = true
             }
         }
-        viewModel.updateFavoriteLiveData.observe(this) { isAddToFavotite ->
+        viewModel.updateFavoriteLiveData.observe(this) { isAddToFavorite ->
             binding.favoritesIconView.setImageResource(
-                if (isAddToFavotite) R.drawable.ic_remove_from_favorite else R.drawable.ic_add_to_favorites
+                if (isAddToFavorite) R.drawable.ic_remove_from_favorite else R.drawable.ic_add_to_favorites
             )
             Snackbar
                 .make(
                     binding.root,
-                    if (isAddToFavotite) R.string.added_to_favorites_text else R.string.removed_from_favorites_text,
+                    if (isAddToFavorite) R.string.added_to_favorites_text else R.string.removed_from_favorites_text,
                     LENGTH_LONG
                 )
                 .show()

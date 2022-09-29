@@ -6,25 +6,30 @@ import androidx.lifecycle.Observer
 import com.lelyuh.githubinfo.GitHubInfoTestHelper.URL
 import com.lelyuh.githubinfo.GitHubInfoTestHelper.createRepoModel
 import com.lelyuh.githubinfo.R
+import com.lelyuh.githubinfo.domain.coroutines.TestCoroutineRule
 import com.lelyuh.githubinfo.domain.interactor.GitHubFavoritesInteractor
 import com.lelyuh.githubinfo.domain.interactor.GitHubInfoInteractor
-import com.lelyuh.githubinfo.domain.rx.RxSchedulersStub
 import com.lelyuh.githubinfo.models.domain.RepositoryListModel
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class RepositoryListViewModelTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val coroutineRule = TestCoroutineRule()
 
     private val gitHubInfoInteractor = mockk<GitHubInfoInteractor>()
     private val favoritesInteractor = mockk<GitHubFavoritesInteractor>()
@@ -35,7 +40,7 @@ class RepositoryListViewModelTest {
 
     private val errorObserver = mockk<Observer<Int>>(relaxUnitFun = true)
 
-    private val viewModel = RepositoryListViewModel(gitHubInfoInteractor, favoritesInteractor, RxSchedulersStub())
+    private val viewModel = RepositoryListViewModel(gitHubInfoInteractor, favoritesInteractor)
 
     @Before
     fun `set up`() {
@@ -52,7 +57,7 @@ class RepositoryListViewModelTest {
         val repoModels = createRepoModel()
         val currentFavoritesSet = setOf("2", "3")
         val currentLogin = "1"
-        every { gitHubInfoInteractor.repos(URL) } returns Single.just(repoModels)
+        coEvery { gitHubInfoInteractor.repos(URL) } returns repoModels
         every { favoritesInteractor.favoritesLogins() } returns currentFavoritesSet
 
         viewModel.loadRepos(URL, currentLogin)
@@ -69,7 +74,7 @@ class RepositoryListViewModelTest {
         val repoModels = createRepoModel()
         val currentFavoritesSet = setOf("1", "2", "3")
         val currentLogin = "1"
-        every { gitHubInfoInteractor.repos(URL) } returns Single.just(repoModels)
+        coEvery { gitHubInfoInteractor.repos(URL) } returns repoModels
         every { favoritesInteractor.favoritesLogins() } returns currentFavoritesSet
 
         viewModel.loadRepos(URL, currentLogin)
@@ -84,7 +89,7 @@ class RepositoryListViewModelTest {
     @Test
     fun `test success get repositories with null favorites`() {
         val repoModels = createRepoModel()
-        every { gitHubInfoInteractor.repos(URL) } returns Single.just(repoModels)
+        coEvery { gitHubInfoInteractor.repos(URL) } returns repoModels
         every { favoritesInteractor.favoritesLogins() } returns null
 
         viewModel.loadRepos(URL, "any")
@@ -100,7 +105,7 @@ class RepositoryListViewModelTest {
     fun `test error on get empty repositories`() {
         val currentFavoritesSet = setOf("1", "2", "3")
         val currentLogin = "1"
-        every { gitHubInfoInteractor.repos(URL) } returns Single.just(emptyList())
+        coEvery { gitHubInfoInteractor.repos(URL) } returns emptyList()
         every { favoritesInteractor.favoritesLogins() } returns currentFavoritesSet
 
         viewModel.loadRepos(URL, currentLogin)
@@ -114,7 +119,7 @@ class RepositoryListViewModelTest {
 
     @Test
     fun `test any exceptions on get repositories`() {
-        every { gitHubInfoInteractor.repos(URL) } returns Single.error(Throwable())
+        coEvery { gitHubInfoInteractor.repos(URL) } throws Throwable()
 
         viewModel.loadRepos(URL, "any")
 
@@ -130,7 +135,7 @@ class RepositoryListViewModelTest {
         val currentLogin = "1"
         val currentFavoritesSet = setOf("1", "2", "3")
         val repoModels = createRepoModel()
-        every { gitHubInfoInteractor.repos(URL) } returns Single.just(repoModels)
+        coEvery { gitHubInfoInteractor.repos(URL) } returns repoModels
         every { favoritesInteractor.favoritesLogins() } returns currentFavoritesSet
         every { favoritesInteractor.updateFavoriteState(currentLogin) } returns false
 
