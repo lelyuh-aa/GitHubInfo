@@ -11,5 +11,5 @@ class GitHubLoginViewModelFactory @Inject constructor(
     private val favoritesInteractor: GitHubFavoritesInteractor
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = GitHubLoginViewModel(favoritesInteractor) as T
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = GitHubLoginViewModel(favoritesInteractor) as T
 }

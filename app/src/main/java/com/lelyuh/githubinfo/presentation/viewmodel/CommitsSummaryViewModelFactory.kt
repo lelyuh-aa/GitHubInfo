@@ -11,6 +11,6 @@ internal class CommitsSummaryViewModelFactory @Inject constructor(
     private val interactor: GitHubInfoInteractor
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
         CommitsSummaryViewModel(interactor) as T
 }

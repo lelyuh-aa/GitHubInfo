@@ -13,6 +13,6 @@ internal class RepositoryListViewModelFactory @Inject constructor(
     private val favoritesInteractor: GitHubFavoritesInteractor
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
         RepositoryListViewModel(repoInteractor, favoritesInteractor) as T
 }

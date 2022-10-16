@@ -16,7 +16,7 @@ internal class GitHubPreferenceImpl(
     override fun favoritesLogins(): Set<String>? = sharedPreference.getStringSet(GIT_HUB_LOGINS_PREFS, null)
 
     override fun updateFavoriteState(login: String): Boolean {
-        val currentSet = LinkedHashSet(favoritesLogins())
+        val currentSet = if (favoritesLogins().isNullOrEmpty()) LinkedHashSet() else LinkedHashSet(favoritesLogins())
         val isFavorite = currentSet.contains(login)
         sharedPreference.edit {
             putStringSet(GIT_HUB_LOGINS_PREFS, currentSet.apply {
