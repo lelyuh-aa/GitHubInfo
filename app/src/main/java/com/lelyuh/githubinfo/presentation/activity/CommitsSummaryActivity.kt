@@ -2,6 +2,7 @@ package com.lelyuh.githubinfo.presentation.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
-import com.lelyuh.githubinfo.GitHubInfoApplication
 import com.lelyuh.githubinfo.R
 import com.lelyuh.githubinfo.databinding.RepoSummaryActivityBinding
 import com.lelyuh.githubinfo.models.domain.RepositoryListModel
@@ -19,6 +19,7 @@ import com.lelyuh.githubinfo.presentation.error.ErrorHelper.showErrorDialog
 import com.lelyuh.githubinfo.presentation.fragment.AuthorsBottomSheetFragment
 import com.lelyuh.githubinfo.presentation.viewmodel.CommitsSummaryViewModel
 import com.lelyuh.githubinfo.presentation.viewmodel.CommitsSummaryViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
@@ -26,6 +27,7 @@ import javax.inject.Inject
  *
  * @author Leliukh Aleksandr
  */
+@AndroidEntryPoint
 class CommitsSummaryActivity : AppCompatActivity() {
 
     @Inject
@@ -36,7 +38,6 @@ class CommitsSummaryActivity : AppCompatActivity() {
     private lateinit var repoModel: RepositoryListModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (applicationContext as GitHubInfoApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = RepoSummaryActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -70,14 +71,20 @@ class CommitsSummaryActivity : AppCompatActivity() {
         }
     }
 
-    private fun initLoad() {
-        (intent.getSerializableExtra(REPO_MODEL_KEY) as? RepositoryListModel)?.let { model ->
+    private fun initLoad() =
+        repoModel()?.let { model ->
             repoModel = model
             initView()
             observeViewModel()
             loadCommitsInfo()
         } ?: showErrorDialog(this)
-    }
+
+    private fun repoModel() =
+        if (Build.VERSION.SDK_INT >= 33) {
+            intent.getSerializableExtra(REPO_MODEL_KEY, RepositoryListModel::class.java)
+        } else {
+            intent.getSerializableExtra(REPO_MODEL_KEY) as? RepositoryListModel
+        }
 
     private fun initView() {
         with(binding) {

@@ -60,7 +60,7 @@ are completely covered by unit tests.
 The application uses several 3d-party libraries for it work:
 - [Retrofit](https://github.com/square/retrofit) - to make requests to the network
 - [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-guide.html) - to perform asynchronous tasks
-- [Dagger](https://github.com/google/dagger) - framework to implement dependency injection
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - framework to implement dependency injection
 - [Mockk](https://mockk.io/) - for support testing on Kotlin
 
 ## Contacts

@@ -9,12 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.transition.TransitionManager
-import com.lelyuh.githubinfo.GitHubInfoApplication
 import com.lelyuh.githubinfo.R
 import com.lelyuh.githubinfo.databinding.GitHubLoginActivityBinding
 import com.lelyuh.githubinfo.presentation.fragment.FavoritesBottomSheetFragment
 import com.lelyuh.githubinfo.presentation.viewmodel.GitHubLoginViewModel
 import com.lelyuh.githubinfo.presentation.viewmodel.GitHubLoginViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
@@ -22,6 +22,7 @@ import javax.inject.Inject
  *
  * @author Leliukh Aleksandr
  */
+@AndroidEntryPoint
 class GitHubLoginActivity : AppCompatActivity() {
 
     @Inject
@@ -31,7 +32,6 @@ class GitHubLoginActivity : AppCompatActivity() {
     private lateinit var binding: GitHubLoginActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (applicationContext as GitHubInfoApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = GitHubLoginActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)

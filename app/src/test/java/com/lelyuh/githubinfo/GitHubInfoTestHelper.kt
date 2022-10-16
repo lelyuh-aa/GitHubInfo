@@ -95,7 +95,8 @@ object GitHubInfoTestHelper {
             if (isCommitsExist)
                 listOf(
                     Date(COMMIT_MODEL_DATE_1), Date(COMMIT_MODEL_DATE_2), Date(COMMIT_MODEL_DATE_3)
-                ) else
+                )
+            else
                 emptyList(),
             if (isAuthorsExist)
                 setOf(COMMIT_MODEL_AUTHOR_2, COMMIT_MODEL_AUTHOR_1)

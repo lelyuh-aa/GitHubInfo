@@ -13,11 +13,15 @@ import com.lelyuh.githubinfo.domain.interactor.GitHubInfoInteractor
 import com.lelyuh.githubinfo.domain.interactor.GitHubInfoInteractorImpl
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 class GitHubInfoModule {
 
     @Singleton
@@ -41,7 +45,7 @@ class GitHubInfoModule {
     @Singleton
     @Provides
     fun provideGitHubFavoritesInteractor(
-        context: Context
+        @ApplicationContext context: Context
     ): GitHubFavoritesInteractor {
         val sharedPreferences = context.getSharedPreferences(GIT_HUB_PREFERENCE, Context.MODE_PRIVATE)
         return GitHubFavoritesInteractorImpl(

@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.lelyuh.githubinfo.GitHubInfoApplication
 import com.lelyuh.githubinfo.R
 import com.lelyuh.githubinfo.databinding.RepoListActivityBinding
 import com.lelyuh.githubinfo.models.domain.RepositoryListModel
@@ -16,6 +15,7 @@ import com.lelyuh.githubinfo.presentation.adapter.RepositoryListAdapter
 import com.lelyuh.githubinfo.presentation.error.ErrorHelper.showErrorDialog
 import com.lelyuh.githubinfo.presentation.viewmodel.RepositoryListViewModel
 import com.lelyuh.githubinfo.presentation.viewmodel.RepositoryListViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
@@ -23,6 +23,7 @@ import javax.inject.Inject
  *
  * @author Leliukh Aleksandr
  */
+@AndroidEntryPoint
 class RepositoriesListActivity : AppCompatActivity(), RepositoryListAdapter.OnItemClickListener {
 
     @Inject
@@ -33,7 +34,6 @@ class RepositoriesListActivity : AppCompatActivity(), RepositoryListAdapter.OnIt
     private lateinit var binding: RepoListActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (applicationContext as GitHubInfoApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = RepoListActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
